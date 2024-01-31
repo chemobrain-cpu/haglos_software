@@ -26,7 +26,7 @@ app.use(bodyParser.json())
 //configuring database
 
 
-mongoose.connect(process.env.DB_LOCAL,{
+mongoose.connect(process.env.DB_STRING,{
   useNewUrlParser:true,
   useUnifiedTopology: true
 }).then(data=>{
