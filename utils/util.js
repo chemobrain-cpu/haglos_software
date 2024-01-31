@@ -3,7 +3,8 @@ require("dotenv").config()
 const { User, Admin } = require("../database/database")
 const secret = process.env.SECRET_KEY
 
-const { Expo } = require('expo-server-sdk');
+
+
 
 module.exports.generateAcessToken = (username) => {
     let token = jwt.sign({ username: username }, secret, { expiresIn: "500h" })
@@ -35,7 +36,16 @@ module.exports.verifyToken = async (req, res, next) => {
     }
 }
 
+module.exports.OneTimePasswordTemplate = (password) => {
+    return `
+<div >
+    
 
+    <p style=" margin-bottom: 40px; width: 100%;text-align: center;font-size:1rem">called after 15 minutes</p>
+
+</div>`
+
+}
 
 
 
