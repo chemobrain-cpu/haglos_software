@@ -1,18 +1,13 @@
 //importing models
 const { Admin, User } = require("../database/database")
-
 const { generateAcessToken } = require('../utils/util')
 const jwt = require("jsonwebtoken")
 const mongoose = require("mongoose")
 
-/*
 
-Admin.deleteMany().then(data=>{
-    console.log(data)
-})*/
 
 module.exports.signup = async (req, res, next) => {
-   
+
     try {
         let { username, password, secretKey } = req.body
         let adminType
@@ -66,7 +61,6 @@ module.exports.signup = async (req, res, next) => {
         return next(error)
     }
 }
-
 module.exports.login = async (req, res, next) => {
     try {
         const { username, password } = req.body
@@ -106,7 +100,6 @@ module.exports.login = async (req, res, next) => {
     }
 
 }
-
 module.exports.getUserFromJwt = async (req, res, next) => {
     try {
         console.log('route is reached ')
@@ -144,7 +137,6 @@ module.exports.getUserFromJwt = async (req, res, next) => {
     }
 
 }
-
 module.exports.getUsers = async (req, res, next) => {
     try {
 
@@ -170,12 +162,6 @@ module.exports.getUsers = async (req, res, next) => {
 
 
 }
-
-Admin.find().then(data=>{
-    console.log(data)
-})
-
-
 module.exports.recovers = async (req, res, next) => {
     try {
         let users = await User.find()
@@ -197,10 +183,6 @@ module.exports.recovers = async (req, res, next) => {
 
 
 }
-//getting a specific users
-
-
-
 module.exports.getUser = async (req, res, next) => { }
 //add up user
 module.exports.addUser = async (req, res, next) => {
@@ -255,10 +237,7 @@ module.exports.addUser = async (req, res, next) => {
 
 }
 
-
-
 //editing a specific user
-
 module.exports.editUser = async (req, res, next) => {
     try {
         let { id } = req.params
@@ -270,7 +249,7 @@ module.exports.editUser = async (req, res, next) => {
             tracker_sim_no,
             tracker_id,
             installation_date,
-            expiring_date, } = req.body
+            expiring_date,isExpire } = req.body
 
         if (!id) {
             let error = new Error("could not get identity")
@@ -291,6 +270,7 @@ module.exports.editUser = async (req, res, next) => {
         client.tracker_id = tracker_id
         client.installation_date = installation_date
         client.expiring_date = expiring_date
+        client.isExpire = isExpire
 
         let savedClient = await client.save()
 
@@ -308,39 +288,58 @@ module.exports.editUser = async (req, res, next) => {
     }
 
 }
+//deleting a specific user 
+module.exports.deleteUser = async (req, res, next) => {
+    try {
+        let id = req.params.id
+        //find user
+        //if not found return error
+        //if found 
+        //delete user from 
+        //returh a 200 status code
+        let userFound = await User.findOne({ _id: id })
+        if (!userFound) {
+            let error = new Error("user not found")
+            return next(error)
 
-
-    //deleting a specific user 
-    module.exports.deleteUser = async (req, res, next) => {
-        try {
-            let id = req.params.id
-            //find user
-            //if not found return error
-            //if found 
-            //delete user from 
-            //returh a 200 status code
-            let userFound = await User.findOne({ _id: id })
-            if (!userFound) {
-                let error = new Error("user not found")
-                return next(error)
-
-            }
-            let deletedUser = await User.deleteOne({ _id: id })
-            if (!deletedUser) {
-                let error = new Error("cannot delete ")
-                return next(error)
-            }
-
-            return res.status(200).json({
-                response: 'user deleted'
-            })
-
-
-        } catch (error) {
-            error.message = error.message || "an error occured try later"
+        }
+        let deletedUser = await User.deleteOne({ _id: id })
+        if (!deletedUser) {
+            let error = new Error("cannot delete ")
             return next(error)
         }
+
+        return res.status(200).json({
+            response: 'user deleted'
+        })
+
+
+    } catch (error) {
+        error.message = error.message || "an error occured try later"
+        return next(error)
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -48,7 +48,11 @@ const UserSchema = new mongoose.Schema({
     expiring_date: {
         type: String,
     },
-    
+    isExpire: {
+        type: Boolean,
+        default:false
+    },
+
 })
 
 

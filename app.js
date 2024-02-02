@@ -77,8 +77,6 @@ app.use((err, req, res, next) => {
   res.status(err.statusCode).json({ response:err.message })
 })
 
-
-
 server.listen(process.env.PORT || 8080, () => {
   console.log("listening on port 8080")
 })

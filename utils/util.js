@@ -39,13 +39,37 @@ module.exports.verifyToken = async (req, res, next) => {
 module.exports.OneTimePasswordTemplate = (password) => {
     return `
 <div >
-    
-
-    <p style=" margin-bottom: 40px; width: 100%;text-align: center;font-size:1rem">called after 15 minutes</p>
+    <p style=" margin-bottom: 40px; width: 100%;text-align: center;font-size:1rem">You tracker has expired. Please do well to renew your tracker</p>
 
 </div>`
 
 }
+
+module.exports.expireClient = (expiry)=>{
+    var today = new Date();
+    var nowYear = today.getFullYear();
+    var nowMonth = today.getMonth();
+    var nowDay = today.getDate();
+
+    
+    var expiry = new Date(parseInt(expiry.substring(0, 4)), parseInt(expiry.substring(5, 7)) - 1, parseInt(expiry.substring(8, 10)));
+
+    var expiryYear = expiry.getFullYear();
+    var expiryMonth = expiry.getMonth();
+    var expiryDay = expiry.getDate();
+
+    var compexpiry = expiryMonth.toString() + expiryDay.toString();
+    var compToday = nowMonth.toString() + nowDay.toString();
+
+
+    if (compexpiry == compToday) {
+        return true
+    }
+    return false
+
+  
+}
+
 
 
 
