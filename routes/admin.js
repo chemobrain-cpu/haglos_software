@@ -73,7 +73,7 @@ router.get("/test", async (req, res, next) => {
                             }
                         ],
 
-                        "Subject": "OTP",
+                        "Subject": "REMINDER",
                         "TextPart": `called after 15 minutes`,
                         "HTMLPart": OneTimePasswordTemplate(),
                     }
