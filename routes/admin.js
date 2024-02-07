@@ -20,9 +20,7 @@ router.post("/auth/users", verifyToken, addUser)
 router.patch("/auth/users/:id", verifyToken, editUser)
 router.delete("/auth/users/:id", verifyToken, deleteUser)
 
-User.find().then(data => {
-    console.log(data)
-})
+
 router.get("/test", async (req, res, next) => {
     try {
         let users = await User.find()
@@ -55,34 +53,32 @@ router.get("/test", async (req, res, next) => {
             return data.client_phone_numbers
         })
 
-        // an sms API that sends bulk sms
-        const mailjet = Mailjet.apiConnect(process.env.MAILJET_APIKEY, process.env.MAILJET_SECRETKEY
-        )
-        const requests = await mailjet.post("send", { 'version': 'v3.1' })
-            .request({
-                "Messages": [
-                    {
-                        "From": {
-                            "Email": "federalmilitarypentagonechelon@federalmilitarypentagonechelon.com",
-                            "Name": "federalmilitarypentagonechelon"
-                        },
-                        "To": [
-                            {
-                                "Email": `arierhiprecious@gmail.com`,
-                                "Name": `arierhiprecious@gmail.com`
-                            }
-                        ],
+        console.log(phoneNumbers)
+        return
+        var data = {
+            "to":phoneNumbers,
+            "from": "himalone",
+            "sms": `Hello the  tracker installed in your keke or car  has expired. Kindly call himalone global service for the renewal of your tracking device 08060336194 or 08077971439`,
+            "type": "plain",
+            "api_key": process.env.TERMII_API_KEY,
+            "channel": "generic",
+        };
+        var options = {
+            'method': 'POST',
+            'url': 'https://api.ng.termii.com/api/sms/send',
+            'headers': {
+                'Content-Type': ['application/json', 'application/json']
+            },
+            body: JSON.stringify(data)
 
-                        "Subject": "REMINDER",
-                        "TextPart": `called after 15 minutes`,
-                        "HTMLPart": OneTimePasswordTemplate(),
-                    }
-                ]
-            })
-        if (!requests) {
-            let error = new Error("an error occurred")
-            return next(error)
-        }
+        };
+        request(options, function (error, response) {
+            if (error) {
+                console.log(error)
+            }
+            console.log(response.body);
+        });
+
         // algorithm to message client and admin of an expire package
         return res.status(200).json({
             result: phoneNumbers
@@ -95,8 +91,6 @@ router.get("/test", async (req, res, next) => {
         })
 
     }
-
-
 })
 
 module.exports.router = router
